@@ -1,0 +1,12 @@
+FROM alpine:latest
+RUN apk add --no-cache --virtual=build-dependencies wget && \
+    apk add --update openjdk8 && \
+    cd "/tmp" && \
+    wget -q https://download.jboss.org/wildfly/18.0.0.Final/wildfly-18.0.0.Final.tar.gz && \
+    tar xzvf wildfly-18.0.0.Final.tar.gz && \
+    mkdir -p /opt/jboss && \
+    mv /tmp/wildfly-18.0.0.Final  /opt/jboss/wildfly && \
+    apk del build-dependencies && \
+    rm "/tmp/"*
+EXPOSE 8080 9990
+CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0"]
